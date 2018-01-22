@@ -22,7 +22,6 @@ export default class CostDetailPage extends Component {
       getCostStats(this.state.cost.CostId).then(res => {
         this.setState({ stats: res }, () => {
           getUserFullStats(this.state.cost.CostId).then(userstats => {
-            console.log(userstats);
             this.setState({ userstats: userstats, loaded: true });
           });
         });

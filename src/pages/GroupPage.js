@@ -1,5 +1,15 @@
 import React, { Component } from "react";
-import { Container, Button, Text, Spinner, H2, Content } from "native-base";
+import { View } from 'react-native';
+import {
+  Container,
+  Button,
+  Text,
+  Spinner,
+  H2,
+  Content,
+  Fab,
+  Icon
+} from "native-base";
 import GroupRow from "../components/GroupRow";
 
 import * as Storage from "../storage/TokenStorage";
@@ -37,10 +47,15 @@ export default class GroupPage extends Component {
     this.props.navigation.navigate("GroupDetail", { group: group });
   };
 
+  addGroup = () => {
+    this.props.navigation.navigate("AddGroup");
+  };
+
   render() {
     if (this.state.initialLoaded) {
       return (
         <Container>
+          
           <Content>
             <Text
               style={{ alignSelf: "center", margin: 20, fontWeight: "bold" }}
@@ -85,6 +100,11 @@ export default class GroupPage extends Component {
               );
             })}
           </Content>
+          <View>
+            <Fab position="bottomRight" style={{ backgroundColor: '#5067FF' }} onPress={() => this.addGroup()}>
+              <Icon name="add" />
+            </Fab>
+          </View>
         </Container>
       );
     } else return <Spinner />;

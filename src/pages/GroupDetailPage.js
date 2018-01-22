@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import { Container, Text, H2, Content, Spinner } from "native-base";
+import { View } from "react-native";
+import { Container, Text, H2, Content, Spinner, Fab, Icon } from "native-base";
 import CostRow from "../components/CostRow";
 
 import { getCostsOfGroup } from "../service/CostService";
@@ -25,6 +26,10 @@ export default class GroupDetailPage extends Component {
     getCostsOfGroup(group.GroupId).then(costs => {
       this.setState({ costs: costs, loading: false });
     });
+  }
+
+  addCost = () => {
+    this.props.navigation.navigate("AddCost", { groupId: this.state.group.GroupId });
   }
 
   render() {
@@ -54,6 +59,11 @@ export default class GroupDetailPage extends Component {
           })}
           {this.state.loading && <Spinner />}
         </Content>
+        <View>
+            <Fab position="bottomRight" style={{ backgroundColor: '#5067FF' }} onPress={() => this.addCost()}>
+              <Icon name="add" />
+            </Fab>
+          </View>
       </Container>
     );
   }
