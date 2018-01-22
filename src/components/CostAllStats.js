@@ -1,5 +1,8 @@
 import React, { Component } from "react";
+import { View } from "react-native";
 import { List, ListItem, Text } from "native-base";
+import ChangeList from "./ChangeList";
+import Debts from "./Debts";
 
 export default class CostAllStats extends Component {
   render() {
@@ -9,7 +12,7 @@ export default class CostAllStats extends Component {
           <Text>Information</Text>
         </ListItem>
         <ListItem>
-          <Text>Total cost: €{this.props.stats.TotalAmount}</Text>
+          <Text>Total cost: €{this.props.stats.TotalCost}</Text>
         </ListItem>
         <ListItem>
           <Text>
@@ -22,11 +25,34 @@ export default class CostAllStats extends Component {
           <Text>Amount owed per person: €{this.props.stats.OwedPerPerson}</Text>
         </ListItem>
         <ListItem itemDivider>
-          <Text>Change</Text>
+          <Text>Actual contributions</Text>
         </ListItem>
-        <ListItem>
-          <Text>Total change: €{this.props.stats.Change}</Text>
+        {this.props.stats.Contributions.map(contribution => {
+          return (
+            <ListItem key={contribution.User.UserId}>
+              <Text>
+                {contribution.User.FirstName} {contribution.User.LastName}{" "}
+                contributed €{contribution.Amount}.
+              </Text>
+            </ListItem>
+          );
+        })}
+        <ListItem itemDivider>
+          <Text>Debts</Text>
         </ListItem>
+        {this.props.stats.Owed.length > 0 ? (
+          <Debts debts={this.props.stats.Owed} />
+        ) : (
+          <ListItem>
+            <Text>All debts settled for this cost! Hooray!</Text>
+          </ListItem>
+        )}
+        {this.props.stats.Change > 0 && (
+          <ChangeList
+            change={this.props.stats.Change}
+            changeReceived={this.props.stats.ChangeReceived}
+          />
+        )}
       </List>
     );
   }

@@ -76,6 +76,19 @@ getUserShortStats = costId => {
     });
 };
 
+getUserFullStats = costId => {
+  return createHeaders()
+    .then(headers => {
+      return fetch(`${BASE_URL}/cost/${costId}/stats/full`, {
+        method: "GET",
+        headers: headers
+      });
+    })
+    .then(res => {
+      return res.json();
+    });
+};
+
 getCostStats = costId => {
   return createHeaders()
     .then(headers => {
@@ -89,4 +102,4 @@ getCostStats = costId => {
     });
 };
 
-export { getUser, getGroups, getGroup, getCostsOfGroup, getUserShortStats, getCostStats };
+export { getUser, getGroups, getGroup, getCostsOfGroup, getUserShortStats, getCostStats, getUserFullStats };
