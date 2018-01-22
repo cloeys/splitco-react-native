@@ -14,9 +14,6 @@ export default class CostRow extends Component {
   }
 
   goToGroup = id => {
-    console.log("pressed the card!!", id);
-    console.log(this.props);
-    console.log(this.props.nav);
     this.props.nav();
   };
 
@@ -25,7 +22,7 @@ export default class CostRow extends Component {
       <TouchableOpacity
         onPress={() => this.goToGroup(this.state.group.GroupId)}
       >
-        <Card style={{ flex: 0, padding: 5, margin: 30 }} pointerEvents="none">
+        <Card style={{ flex: 0, padding: 5 }} pointerEvents="none">
           <CardItem cardBody>
             <Left>
               <Icon name="home" />

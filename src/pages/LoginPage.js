@@ -14,7 +14,6 @@ export default class LoginPage extends Component {
     componentWillMount() {
         Storage.getAuthToken().then(res => {
             if (res !== null) {
-                console.log('skipping login because token found');
                 this.props.onLoginPress();
             }
         })

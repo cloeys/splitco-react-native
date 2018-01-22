@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { Container, Text, H2 } from "native-base";
-import CostRow from '../components/CostRow';
+import { Container, Text, H2, Content, Spinner } from "native-base";
+import CostRow from "../components/CostRow";
 
 import { getCostsOfGroup } from "../service/CostService";
 
 export default class GroupDetailPage extends Component {
   state = {
     group: {},
-    costs: [], 
+    costs: [],
     loading: true
   };
 
@@ -23,7 +23,6 @@ export default class GroupDetailPage extends Component {
     const group = this.props.navigation.state.params.group;
     this.setState({ group: group });
     getCostsOfGroup(group.GroupId).then(costs => {
-      console.log(costs);
       this.setState({ costs: costs, loading: false });
     });
   }
@@ -31,13 +30,30 @@ export default class GroupDetailPage extends Component {
   render() {
     return (
       <Container>
-        {!this.state.loading && this.state.costs.length == 0 && 
-        <Container style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-            <H2>No costs made in this group.</H2>
-        </Container>}
-        {this.state.costs.map(cost => {
-          return <CostRow key={cost.CostId} cost={cost} nav={() => this.goToDetail(cost)}/>;
-        })}
+        <Content>
+          {!this.state.loading &&
+            this.state.costs.length == 0 && (
+              <Container
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              >
+                <H2>No costs made in this group yet!</H2>
+              </Container>
+            )}
+          {!this.state.loading && this.state.costs.map(cost => {
+            return (
+              <CostRow
+                key={cost.CostId}
+                cost={cost}
+                nav={() => this.goToDetail(cost)}
+              />
+            );
+          })}
+          {this.state.loading && <Spinner />}
+        </Content>
       </Container>
     );
   }

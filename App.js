@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import Navigation from './src/navigation/Navigation';
 import LoginPage from './src/pages/LoginPage';
+import { Spinner } from 'native-base';
 
 export default class AppPage extends Component {
   state = {
@@ -30,7 +31,7 @@ export default class AppPage extends Component {
         return <LoginPage onLoginPress={() => this.setState({isLoggedIn: true})} />;
       }
     } else {
-      return null;
+      return <Spinner />;
     }
   }
 }
