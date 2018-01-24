@@ -60,6 +60,14 @@ export default class CostDetailPage extends Component {
     this.props.navigation.dispatch(resetAction);
   };
 
+  goToSettlePage = () => {
+    this.props.navigation.navigate("Settle", {
+      owes: this.state.userstats.UsersOwedOrInDebtTo,
+      cost: this.state.cost,
+      group: this.props.navigation.state.params.group
+    });
+  };
+
   closeCost = () => {
     Alert.alert(
       "Close cost",
@@ -134,7 +142,10 @@ export default class CostDetailPage extends Component {
                 />
               </Tab>
               <Tab heading="Your statistics">
-                <CostMyStats stats={this.state.userstats} costId={this.state.cost.CostId} />
+                <CostMyStats
+                  stats={this.state.userstats}
+                  costId={this.state.cost.CostId}
+                />
               </Tab>
             </Tabs>
           </Content>
@@ -154,19 +165,24 @@ export default class CostDetailPage extends Component {
               >
                 <Icon name="trash" />
               </Button>
-              {!this.state.cost.Closed && (
-                <Button
-                  style={{ backgroundColor: "orange" }}
-                  onPress={this.closeCost}
-                >
-                  <Icon name="close" />
-                </Button>
-              )}
-              {!this.state.cost.Closed && (
-                <Button style={{ backgroundColor: "green" }}>
-                  <Icon name="add" />
-                </Button>
-              )}
+              {!this.state.cost.Closed &&
+                this.state.stats.Owed.length == 0 && (
+                  <Button
+                    style={{ backgroundColor: "orange" }}
+                    onPress={this.closeCost}
+                  >
+                    <Icon name="close" />
+                  </Button>
+                )}
+              {!this.state.cost.Closed &&
+                this.state.userstats.CostStatus == "In debt" && (
+                  <Button
+                    style={{ backgroundColor: "green" }}
+                    onPress={this.goToSettlePage}
+                  >
+                    <Icon name="add" />
+                  </Button>
+                )}
             </Fab>
           </View>
         </Container>

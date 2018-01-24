@@ -155,6 +155,20 @@ getContributionsOfUserOfCost = costId => {
     });
 };
 
+addContribution = contribution => {
+  return createHeaders()
+    .then(headers => {
+      return fetch(`${BASE_URL}/contribution/`, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(contribution)
+      });
+    })
+    .then(res => {
+      return res.json();
+    });
+};
+
 export {
   getUser,
   getGroups,
@@ -166,5 +180,6 @@ export {
   addNewCost,
   closeCost,
   removeCost,
-  getContributionsOfUserOfCost
+  getContributionsOfUserOfCost,
+  addContribution
 };
