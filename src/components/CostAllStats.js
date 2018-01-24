@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View } from "react-native";
-import { List, ListItem, Text } from "native-base";
+import { List, ListItem, Text, Icon } from "native-base";
 import ChangeList from "./ChangeList";
 import Debts from "./Debts";
 
@@ -10,6 +10,9 @@ export default class CostAllStats extends Component {
       <List>
         <ListItem itemDivider>
           <Text>Information</Text>
+        </ListItem>
+        <ListItem>
+          <Text>Description: {this.props.description} {this.props.closed ? "(closed)" : "(open)"}</Text>
         </ListItem>
         <ListItem>
           <Text>Total cost: €{this.props.stats.TotalCost}</Text>

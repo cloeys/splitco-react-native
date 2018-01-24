@@ -102,4 +102,69 @@ getCostStats = costId => {
     });
 };
 
-export { getUser, getGroups, getGroup, getCostsOfGroup, getUserShortStats, getCostStats, getUserFullStats };
+addNewCost = newCostObject => {
+  return createHeaders()
+    .then(headers => {
+      return fetch(`${BASE_URL}/cost/`, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(newCostObject)
+      });
+    })
+    .then(res => {
+      return res.json();
+    });
+};
+
+closeCost = costId => {
+  return createHeaders()
+    .then(headers => {
+      return fetch(`${BASE_URL}/cost/${costId}/`, {
+        method: "DELETE",
+        headers: headers
+      });
+    })
+    .then(res => {
+      return res.json();
+    });
+};
+
+removeCost = costId => {
+  return createHeaders()
+    .then(headers => {
+      return fetch(`${BASE_URL}/cost/${costId}/remove`, {
+        method: "DELETE",
+        headers: headers
+      });
+    })
+    .then(res => {
+      return res.json();
+    });
+};
+
+getContributionsOfUserOfCost = costId => {
+  return createHeaders()
+    .then(headers => {
+      return fetch(`${BASE_URL}/contribution/cost/${costId}`, {
+        method: "GET",
+        headers: headers
+      });
+    })
+    .then(res => {
+      return res.json();
+    });
+};
+
+export {
+  getUser,
+  getGroups,
+  getGroup,
+  getCostsOfGroup,
+  getUserShortStats,
+  getCostStats,
+  getUserFullStats,
+  addNewCost,
+  closeCost,
+  removeCost,
+  getContributionsOfUserOfCost
+};

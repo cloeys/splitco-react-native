@@ -21,8 +21,9 @@ export default class CostRow extends Component {
     return (
       <TouchableOpacity
         onPress={() => this.goToGroup(this.state.group.GroupId)}
+        style={{ flex: 0, margin: 2 }}
       >
-        <Card style={{ flex: 0, padding: 5 }} pointerEvents="none">
+        <Card>
           <CardItem cardBody>
             <Left>
               <Icon name="home" />

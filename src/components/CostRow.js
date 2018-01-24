@@ -1,7 +1,17 @@
 import React, { Component } from "react";
-import { Text, Container, Card, CardItem, Left, Icon, Body } from "native-base";
-import { TouchableOpacity } from "react-native";
-import { getUserShortStats } from "../service/CostService";
+import {
+  Text,
+  Container,
+  Card,
+  CardItem,
+  Left,
+  Icon,
+  Body,
+  Button,
+  Right
+} from "native-base";
+import { TouchableOpacity, Alert, ToastAndroid } from "react-native";
+import { getUserShortStats, closeCost } from "../service/CostService";
 import moment from "moment";
 
 export default class CostRow extends Component {
@@ -26,25 +36,61 @@ export default class CostRow extends Component {
     this.props.nav();
   };
 
+  closeCost = id => {
+    Alert.alert(
+      "Close cost",
+      "This will move this cost to the closed list. Are you sure?",
+      [
+        {
+          text: "Cancel",
+          style: "cancel"
+        },
+        {
+          text: "OK",
+          onPress: () => {
+            closeCost(id).then(res => {
+              if (res.Success == true) {
+                ToastAndroid.show(
+                  `Cost ${id} successfully closed.`,
+                  ToastAndroid.SHORT
+                );
+                this.props.refresh();
+              } else {
+                ToastAndroid.show(`Error: res.Message`, ToastAndroid.SHORT);
+              }
+            });
+          }
+        }
+      ],
+      { cancelable: false }
+    );
+  };
+
   render() {
     let statusIcon = <Icon name="home" />;
     let statusText = null;
 
-    if (this.state.stats.CostStatus === 'Settled') {
-      statusText = <Text>Your status: Settled</Text>;
+    if (this.state.stats.CostStatus === "Settled") {
+      statusText = <Text>Settled</Text>;
     } else {
-      statusText = <Text>Your status: {this.state.stats.CostStatus} (€{this.state.stats.Amount})</Text>;
+      statusText = (
+        <Text>
+          {this.state.stats.CostStatus} (€{this.state.stats.Amount})
+        </Text>
+      );
     }
 
-    switch(this.state.stats.CostStatus) {
+    switch (this.state.stats.CostStatus) {
       case "Settled":
-        statusIcon = <Icon name="checkmark" style={{color: 'green'}} />;
+        statusIcon = <Icon name="checkmark" style={{ color: "green" }} />;
         break;
       case "In debt":
-        statusIcon = <Icon name="arrow-round-down" style={{color: 'red'}}  />;
+        statusIcon = <Icon name="arrow-round-down" style={{ color: "red" }} />;
         break;
       case "Owed":
-        statusIcon = <Icon name="arrow-round-up" style={{color: '#00bfff'}} />;
+        statusIcon = (
+          <Icon name="arrow-round-up" style={{ color: "#00bfff" }} />
+        );
         break;
       default:
         statusIcon = <Text>oops</Text>;
@@ -52,8 +98,8 @@ export default class CostRow extends Component {
     }
 
     return (
-      <TouchableOpacity onPress={() => this.goToCost(this.state.cost.CostId)}>
-        <Card style={{ flex: 0, padding: 2 }} pointerEvents="none">
+      <TouchableOpacity onPress={() => this.goToCost(this.state.cost.CostId)} style={{ flex: 0, margin: 2, padding: 2 }}>
+        <Card>
           <CardItem header>
             <Left>
               <Icon name="cash" />
@@ -63,12 +109,26 @@ export default class CostRow extends Component {
                 </Text>
               </Body>
             </Left>
+            {this.state.stats.CostStatus === "Settled" &&
+              !this.state.cost.Closed && (
+                <Right>
+                  <Button
+                    small
+                    transparent
+                    danger
+                    iconLeft
+                    bordered
+                    onPress={() => this.closeCost(this.state.cost.CostId)}
+                  >
+                    <Icon name="close" />
+                    <Text>Close</Text>
+                  </Button>
+                </Right>
+              )}
           </CardItem>
-          <CardItem cardBody>
-            <Body>
-              {statusText} 
-            </Body>
+          <CardItem cardBody style={{paddingLeft: 5}}>
             {statusIcon}
+            {statusText}
           </CardItem>
           <CardItem footer>
             <Body>
