@@ -10,7 +10,7 @@ export default class CostMyStats extends Component {
     loaded: false
   };
 
-  const judgyComments = [
+  judgyComments = [
     "About time you pay that, huh?",
     "Don't worry, (s)he probably won't need the money.",
     "Will you ever pay your debts?",
@@ -26,7 +26,7 @@ export default class CostMyStats extends Component {
     });
   }
 
-  function getRandomInt(max) {
+  getRandomInt(max) {
     return Math.floor(Math.random() * Math.floor(max));
   }
 
@@ -61,7 +61,7 @@ export default class CostMyStats extends Component {
               return (
                 <ListItem key={debt.User.UserId}>
                   <Text>
-                    You still owe {debt.User.FirstName} €{debt.Amount}. {this.getJudgyComment}
+                    You still owe {debt.User.FirstName} €{debt.Amount}. {this.getJudgyComment()}
                   </Text>
                 </ListItem>
               );
