@@ -9,7 +9,11 @@ import {
   Input,
   Button
 } from "native-base";
-import { View, ToastAndroid } from "react-native";
+import {
+  View,
+  ToastAndroid,
+  KeyboardAvoidingView
+} from "react-native";
 import { addContribution } from "../service/CostService";
 import { NavigationActions } from "react-navigation";
 
@@ -45,22 +49,22 @@ export default class SettlePage extends Component {
 
   contribute = (amount, userId) => {
     if (amount == null) {
-        this.setState({ errorMessage: "No value given" });
-        return;
+      this.setState({ errorMessage: "No value given" });
+      return;
     } else {
-        const contribution = {
-            UserOwedId: userId,
-            Amount: amount,
-            CostId: this.props.navigation.state.params.cost.CostId
-        };
-        addContribution(contribution).then(res => {
-            if (res.Message) {
-                this.setState({errorMessage: res.Message})
-            } else {
-                ToastAndroid.show("Contribution registered!", ToastAndroid.SHORT);
-                this.returnToCostRefreshed();
-            }
-        })
+      const contribution = {
+        UserOwedId: userId,
+        Amount: amount,
+        CostId: this.props.navigation.state.params.cost.CostId
+      };
+      addContribution(contribution).then(res => {
+        if (res.Message) {
+          this.setState({ errorMessage: res.Message });
+        } else {
+          ToastAndroid.show("Contribution registered!", ToastAndroid.SHORT);
+          this.returnToCostRefreshed();
+        }
+      });
     }
   };
 
@@ -74,8 +78,11 @@ export default class SettlePage extends Component {
           params: { group: this.props.navigation.state.params.group }
         }),
         NavigationActions.navigate({
-            routeName: "CostDetail",
-            params: { cost: this.props.navigation.state.params.cost, group: this.props.navigation.state.params.group  }
+          routeName: "CostDetail",
+          params: {
+            cost: this.props.navigation.state.params.cost,
+            group: this.props.navigation.state.params.group
+          }
         })
       ]
     });
@@ -89,7 +96,7 @@ export default class SettlePage extends Component {
 
   render() {
     return (
-      <Container>
+      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <Content>
           {this.state.owes.map(owe => {
             return (
@@ -101,10 +108,12 @@ export default class SettlePage extends Component {
                 </ListItem>
                 <Item floatingLabel>
                   <Label>Amount (in euros)</Label>
-                  <Input
-                    keyboardType="numeric"
-                    onChangeText={text => this.setAmount(text, owe.User.UserId)}
-                  />
+                    <Input
+                      keyboardType="numeric"
+                      onChangeText={text =>
+                        this.setAmount(text, owe.User.UserId)
+                      }
+                    />
                 </Item>
                 {!!this.state.errorMessage && (
                   <Text style={{ fontSize: 14, color: "red", padding: 5 }}>
@@ -113,7 +122,7 @@ export default class SettlePage extends Component {
                 )}
                 <Button
                   full
-                  style={{marginBottom: 2}}
+                  style={{ marginBottom: 2 }}
                   onPress={() =>
                     this.contribute(
                       this.getAmountOfUser(owe.User.UserId),
@@ -133,7 +142,7 @@ export default class SettlePage extends Component {
             );
           })}
         </Content>
-      </Container>
+      </KeyboardAvoidingView>
     );
   }
 }

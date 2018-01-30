@@ -11,6 +11,20 @@ createHeaders = () => {
   });
 };
 
+registerUser = newUserObject => {
+  return createHeaders()
+    .then(headers => {
+      return fetch(`${BASE_URL}/register/`, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(newUserObject)
+      });
+    })
+    .then(res => {
+      return res.json();
+    });
+}; 
+
 getUser = () => {
   return createHeaders()
     .then(headers => {
@@ -42,6 +56,19 @@ getGroup = id => {
     .then(headers => {
       return fetch(BASE_URL + "/group/" + id, {
         method: "GET",
+        headers: headers
+      });
+    })
+    .then(res => {
+      return res.json();
+    });
+};
+
+removeGroup = id => {
+  return createHeaders()
+    .then(headers => {
+      return fetch(BASE_URL + "/group/" + id, {
+        method: "DELETE",
         headers: headers
       });
     })
@@ -169,8 +196,37 @@ addContribution = contribution => {
     });
 };
 
+getUsers = query => {
+  return createHeaders()
+    .then(headers => {
+      return fetch(`${BASE_URL}/user/find?email=${query}`, {
+        method: "GET",
+        headers: headers
+      });
+    })
+    .then(res => {
+      return res.json();
+    });
+};
+
+addGroup = group => {
+  return createHeaders()
+    .then(headers => {
+      return fetch(`${BASE_URL}/group/`, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(group)
+      });
+    })
+    .then(res => {
+      return res.json();
+    });
+};
+
 export {
+  registerUser,
   getUser,
+  getUsers,
   getGroups,
   getGroup,
   getCostsOfGroup,
@@ -181,5 +237,7 @@ export {
   closeCost,
   removeCost,
   getContributionsOfUserOfCost,
-  addContribution
+  addContribution,
+  addGroup,
+  removeGroup
 };

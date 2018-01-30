@@ -12,6 +12,7 @@ import {
 } from "native-base";
 import { addNewCost } from "../service/CostService";
 import { NavigationActions } from "react-navigation";
+import { KeyboardAvoidingView } from "react-native";
 
 export default class AddCostPage extends Component {
   static navigationOptions = ({ navigation }) => ({
@@ -84,19 +85,19 @@ export default class AddCostPage extends Component {
 
   render() {
     return (
-      <Container>
+      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
         <Content>
           <Form>
             <Item floatingLabel>
               <Label>Description</Label>
-              <Input onChangeText={text => this.setDescription(text)} />
+                <Input onChangeText={text => this.setDescription(text)} />
             </Item>
             <Item floatingLabel>
               <Label>Amount (in euros)</Label>
-              <Input
-                keyboardType="numeric"
-                onChangeText={text => this.setAmount(text)}
-              />
+                <Input
+                  keyboardType="numeric"
+                  onChangeText={text => this.setAmount(text)}
+                />
             </Item>
             <Separator bordered>
               <Text style={{ fontWeight: "bold", fontSize: 16 }}>
@@ -109,13 +110,13 @@ export default class AddCostPage extends Component {
                   <Label>
                     {user.FirstName} {user.LastName}:
                   </Label>
-                  <Input
-                    placeholder="0"
-                    keyboardType="numeric"
-                    onChangeText={text =>
-                      this.setMemberContribution(user.UserId, text)
-                    }
-                  />
+                    <Input
+                      placeholder="0"
+                      keyboardType="numeric"
+                      onChangeText={text =>
+                        this.setMemberContribution(user.UserId, text)
+                      }
+                    />
                 </Item>
               );
             })}
@@ -129,7 +130,7 @@ export default class AddCostPage extends Component {
             <Text>Submit cost</Text>
           </Button>
         </Content>
-      </Container>
+      </KeyboardAvoidingView>
     );
   }
 }

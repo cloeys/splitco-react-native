@@ -5,6 +5,8 @@ import CostDetailPage from '../pages/CostDetailPage';
 import AddGroupPage from '../pages/AddGroupPage';
 import AddCostPage from '../pages/AddCostPage';
 import SettlePage from '../pages/SettlePage';
+import RegisterPage from '../pages/RegisterPage';
+import GroupInformationPage from '../pages/GroupInformationPage';
 
 const Navigation = StackNavigator({
     Home: {
@@ -24,6 +26,12 @@ const Navigation = StackNavigator({
     },
     Settle: {
         screen: SettlePage
+    },
+    Register: {
+        screen: RegisterPage
+    },
+    GroupInfo: {
+        screen: GroupInformationPage
     }
 });
 

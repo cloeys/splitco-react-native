@@ -1,9 +1,16 @@
 import React, { Component } from "react";
-import { ToastAndroid, StatusBar } from "react-native";
+import {
+  ToastAndroid,
+  StatusBar,
+  TouchableOpacity,
+  KeyboardAvoidingView
+  
+} from "react-native";
 import {
   Item,
   Input,
   Container,
+  Content,
   Header,
   Body,
   Title,
@@ -16,19 +23,27 @@ import {
 import * as Storage from "../storage/TokenStorage";
 
 export default class LoginPage extends Component {
+  static navigationOptions = {
+    title: "Login"
+  };
+
   state = {
     username: "",
     password: "",
     isLoggingIn: false,
-    message: ""
+    message: "",
+    loginAction: null
   };
 
   componentWillMount() {
     Storage.getAuthToken().then(res => {
       if (res !== null) {
-        this.props.onLoginPress();
+        this.props.screenProps();
       }
     });
+  }
+  componentDidMount() {
+    this.setState({ loginAction: this.props.screenProps });
   }
 
   _username = username => {
@@ -42,8 +57,8 @@ export default class LoginPage extends Component {
   _userLogin = () => {
     this.setState({ isLoggingIn: true, message: "" });
     var params = {
-      username: this.state.username,
-      password: this.state.password,
+      username: this.state.username.trim(),
+      password: this.state.password.trim(),
       grant_type: "password"
     };
 
@@ -79,57 +94,60 @@ export default class LoginPage extends Component {
       })
       .then(() => {
         this.setState({ isLoggingIn: false });
-        if (proceed) this.props.onLoginPress();
+        if (proceed) this.state.loginAction();
       })
       .done();
   };
 
   render() {
     return (
-      <Container>
-        <Header style={{ marginTop: StatusBar.currentHeight }}>
-          <Left />
-          <Body>
-            <Title>Login</Title>
-          </Body>
-          <Right />
-        </Header>
-        <Item>
-          <Input
-            placeholder="Username"
-            keyboardType="email-address"
-            onChangeText={text => this._username(text)}
-            autoFocus={true}
-            autoCapitalize="none"
-          />
-        </Item>
-        <Item>
-          <Input
-            secureTextEntry={true}
-            placeholder="Password"
-            onChangeText={text => this._password(text)}
-            autoCapitalize="none"
-          />
-        </Item>
-        {this.state.isLoggingIn && <Spinner />}
-        {!!this.state.message && (
-          <Text style={{ fontSize: 14, color: "red", padding: 5 }}>
-            {this.state.message}
-          </Text>
-        )}
-        <Button
-          full
-          info
-          disabled={
-            this.state.isLoggingIn ||
-            !this.state.username ||
-            !this.state.password
-          }
-          onPress={this._userLogin}
-        >
-          <Text>Login</Text>
-        </Button>
-      </Container>
+      <KeyboardAvoidingView behavior="padding" style={{ flex: 1 }}>
+        <Content>
+          <Item>
+              <Input
+                placeholder="E-mail"
+                keyboardType="email-address"
+                onChangeText={text => this._username(text)}
+                autoFocus={true}
+                autoCapitalize="none"
+              />
+          </Item>
+          <Item>
+              <Input
+                secureTextEntry={true}
+                placeholder="Password"
+                onChangeText={text => this._password(text)}
+                autoCapitalize="none"
+              />
+          </Item>
+          {this.state.isLoggingIn && <Spinner />}
+          {!!this.state.message && (
+            <Text style={{ fontSize: 14, color: "red", padding: 5 }}>
+              {this.state.message}
+            </Text>
+          )}
+          <Button
+            full
+            info
+            disabled={
+              this.state.isLoggingIn ||
+              !this.state.username ||
+              !this.state.password
+            }
+            onPress={this._userLogin}
+          >
+            <Text>Login</Text>
+          </Button>
+
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate("Register")}
+          >
+            <Text style={{ color: "blue", alignSelf: "center", marginTop: 15 }}>
+              No account yet? Register now!
+            </Text>
+          </TouchableOpacity>
+        </Content>
+      </KeyboardAvoidingView>
     );
   }
 }

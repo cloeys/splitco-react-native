@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View } from 'react-native';
+import { View, RefreshControl } from "react-native";
 import {
   Container,
   Button,
@@ -8,7 +8,9 @@ import {
   H2,
   Content,
   Fab,
-  Icon
+  Icon,
+  List,
+  ListItem
 } from "native-base";
 import GroupRow from "../components/GroupRow";
 
@@ -38,25 +40,35 @@ export default class GroupPage extends Component {
     getUser().then(res => {
       this.setState({ user: res, initialLoaded: true });
     });
+    this.getGroups();
+  }
+
+  getGroups = () => {
     getGroups().then(res => {
       this.setState({ groups: res, loading: false });
     });
-  }
+  };
 
   goToDetail = group => {
     this.props.navigation.navigate("GroupDetail", { group: group });
   };
 
   addGroup = () => {
-    this.props.navigation.navigate("AddGroup");
+    this.props.navigation.navigate("AddGroup", { userId: this.state.user.UserId });
   };
 
   render() {
     if (this.state.initialLoaded) {
       return (
         <Container>
-          
-          <Content>
+          <Content
+            refreshControl={
+              <RefreshControl
+                refreshing={this.state.loading}
+                onRefresh={this.getGroups}
+              />
+            }
+          >
             <Text
               style={{ alignSelf: "center", margin: 20, fontWeight: "bold" }}
             >
@@ -80,28 +92,29 @@ export default class GroupPage extends Component {
 
             {!this.state.loading &&
               this.state.groups.length == 0 && (
-                <Container
-                  style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "flex-start"
-                  }}
-                >
-                  <H2>You aren't part of any groups yet!</H2>
-                </Container>
+                <View>
+                  <H2 style={{ alignSelf: "center", marginTop: 10 }}>
+                    You aren't part of any groups yet!
+                  </H2>
+                </View>
               )}
+              <List>
             {this.state.groups.map(group => {
               return (
-                <GroupRow
-                  group={group}
-                  key={group.GroupId}
-                  nav={() => this.goToDetail(group)}
-                />
+                <ListItem key={group.GroupId} onPress={() => this.goToDetail(group)} style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <Text>{group.Name}</Text>
+                    <Icon name="arrow-forward" />
+                  </ListItem>
               );
             })}
+            </List>
           </Content>
           <View>
-            <Fab position="bottomRight" style={{ backgroundColor: '#5067FF' }} onPress={() => this.addGroup()}>
+            <Fab
+              position="bottomRight"
+              style={{ backgroundColor: "#5067FF" }}
+              onPress={() => this.addGroup()}
+            >
               <Icon name="add" />
             </Fab>
           </View>

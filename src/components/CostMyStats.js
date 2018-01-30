@@ -10,10 +10,29 @@ export default class CostMyStats extends Component {
     loaded: false
   };
 
+  const judgyComments = [
+    "About time you pay that, huh?",
+    "Don't worry, (s)he probably won't need the money.",
+    "Will you ever pay your debts?",
+    "That debt is going to pay itself, you know.",
+    "Why look at that...",
+    "You are so responsible!",
+    "You wouldn't like not getting your money either, wouldn't you?"
+  ];
+
   componentWillMount() {
     getContributionsOfUserOfCost(this.props.costId).then(contributions => {
       this.setState({ contributions: contributions, loaded: true });
     });
+  }
+
+  function getRandomInt(max) {
+    return Math.floor(Math.random() * Math.floor(max));
+  }
+
+  getJudgyComment = () => {
+    const comm = this.getRandomInt(this.judgyComments.length - 1);
+    return this.judgyComments[comm];
   }
 
   render() {
@@ -42,7 +61,7 @@ export default class CostMyStats extends Component {
               return (
                 <ListItem key={debt.User.UserId}>
                   <Text>
-                    You still owe {debt.User.FirstName} €{debt.Amount}.
+                    You still owe {debt.User.FirstName} €{debt.Amount}. {this.getJudgyComment}
                   </Text>
                 </ListItem>
               );
