@@ -2,17 +2,24 @@
   "expo": {
     "name": "Splitco",
     "slug": "splitco",
-    "icon": "./web_hi_res_512.png",
-    "loading": {
-      "icon": "./web_hi_res_512.png"
-    },
-    "privacy": "unlisted",
+    "icon": "./splitco.png",
+    "version": "0.1.1",
+    "orientation": "portrait",
+    "privacy": "public",
+    "platforms": ["android"],
+    "primaryColor": "#5ddb69",
     "sdkVersion": "23.0.0",
+    "splash": {
+      "image": "./splitco.png",
+      "backgroundColor": "#5ddb69"
+    },
     "ios": {
-      "bundleIdentifier": "com.cloeys.splitco"
+      "bundleIdentifier": "com.loeysco.splitco"
     },
     "android": {
-      "package": "com.cloeys.splitco"
+      "package": "com.loeysco.splitco",
+        "permissions": [],
+        "playStoreUrl": "https://play.google.com/store/apps/details?id=com.loeysco.splitco"
     }
   }
 }

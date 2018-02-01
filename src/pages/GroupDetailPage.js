@@ -155,7 +155,7 @@ export default class GroupDetailPage extends Component {
               <Icon name="trash" />
             </Button>
             <Button style={{ backgroundColor: "green" }} onPress={this.addCost}>
-              <Icon name="close" />
+              <Icon name="add" />
             </Button>
           </Fab>
         </View>
